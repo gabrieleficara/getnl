@@ -1,39 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gficara <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/12/15 17:44:21 by gficara           #+#    #+#             */
+/*   Updated: 2017/12/16 13:08:31 by gficara          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "get_next_line.h"
 #include <fcntl.h>
-#include "libft/libft.h"
-#include <sys/types.h>
-#include <sys/uio.h>
-#include <unistd.h>
 
-#define BUFFER_SIZE		10
-
-int get_next_line(const int fd, char **line);
-
-int main(int argc, const char *argv[])
+int		main(int argc, const char *argv[])
 {
 	int		fd;
-	int		i;
-	char	buf[BUFFER_SIZE + 1];
 	char	*new;
+	int		i;
 
 	if (argc != 2)
 		return (0);
-	fd = open(argv [1], O_RDONLY);
+	fd = open(argv[1], O_RDONLY);
 	i = get_next_line(fd, &new);
-	ft_putendl(new);
-	i = get_next_line(fd, &new);
-	ft_putendl(new);
-	fd = close(fd);
-	return 0;
-}
-/*
-	i = read(fd, buf, BUFFER_SIZE);
-	buf[i] = '\0';
-	new = ft_strdup(buf);
 	while (i)
 	{
-	i = read(fd, buf, BUFFER_SIZE);
-	buf[i] = '\0';
-	new = ft_sfstrjoin(new, buf, 1);
-	ft_putnbrendl(i);
+		i = get_next_line(fd, &new);
+		ft_putendl(new);
 	}
-*/
+	fd = close(fd);
+	return (0);
+}
