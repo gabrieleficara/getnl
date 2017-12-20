@@ -6,7 +6,7 @@
 /*   By: gficara <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/15 16:49:15 by gficara           #+#    #+#             */
-/*   Updated: 2017/12/18 12:19:20 by gficara          ###   ########.fr       */
+/*   Updated: 2017/12/20 17:07:43 by gficara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,16 @@ int			get_next_line(const int fd, char **line)
 		if (i[0] == -1 || (i[0] == 0 && i[3]++ == 0))
 			break ;
 		buf[i[0]] = '\0';
-		str = ft_sfstrjoin(str, buf, 0);
+		str = ft_sfstrjoin(str, buf, 1);
 		i[1] = ft_srchln(i[1], &str, line, 0);
 		i[2] = (str[i[1]] == '\n') ? 0 : 1;
 	}
 	if (i[0] == -1)
+	{
 		return (-1);
+	}
+	if (*str == '\0')
+		return (0);
 	ft_srchln(i[1], &str, line, 1);
-	return ((i[0] == 0) ? 0 : 1);
+	return (1);
 }
