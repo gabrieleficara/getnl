@@ -6,7 +6,7 @@
 /*   By: gficara <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/15 16:49:15 by gficara           #+#    #+#             */
-/*   Updated: 2017/12/16 11:10:15 by gficara          ###   ########.fr       */
+/*   Updated: 2017/12/18 12:19:20 by gficara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,9 @@ static int	ft_srchln(int j, char **str, char **line, int use)
 				new = ft_strdup(new + j);
 			else
 				ft_strdel(&new);
-			new = (new) ? new : NULL;
+			*str = new;
 		}
 	}
-	*str = new;
 	return (j);
 }
 
@@ -43,10 +42,12 @@ static void	init(int *i, char **str, char **line)
 	i[0] = 1;
 	i[1] = 0;
 	i[2] = 1;
+	i[3] = 0;
 	if (*str)
 	{
 		i[1] = ft_srchln(i[1], str, line, 0);
 		i[2] = ((*str)[i[1]] == '\n') ? 0 : 1;
+		i[3]++;
 	}
 	else
 		*str = ft_strnew(0);
@@ -60,19 +61,21 @@ int			get_next_line(const int fd, char **line)
 {
 	char		buf[BUFF_SIZE + 1];
 	static char	*str;
-	int			i[3];
+	int			i[4];
 
 	init(i, &str, line);
 	while (i[0] && i[2] == 1)
 	{
 		i[0] = read(fd, buf, BUFF_SIZE);
-		if (i[0] == -1)
-			return (-1);
+		if (i[0] == -1 || (i[0] == 0 && i[3]++ == 0))
+			break ;
 		buf[i[0]] = '\0';
 		str = ft_sfstrjoin(str, buf, 0);
 		i[1] = ft_srchln(i[1], &str, line, 0);
 		i[2] = (str[i[1]] == '\n') ? 0 : 1;
 	}
+	if (i[0] == -1)
+		return (-1);
 	ft_srchln(i[1], &str, line, 1);
-	return ((i[2] == 0) ? 1 : 0);
+	return ((i[0] == 0) ? 0 : 1);
 }
