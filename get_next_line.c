@@ -6,7 +6,7 @@
 /*   By: gficara <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/15 16:49:15 by gficara           #+#    #+#             */
-/*   Updated: 2017/12/20 17:07:43 by gficara          ###   ########.fr       */
+/*   Updated: 2017/12/20 17:44:46 by gficara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static int	ft_srchln(int j, char **str, char **line, int use)
 {
 	char	*new;
+	char	*ptr;
 
 	new = *str;
 	if (use == 0)
@@ -28,10 +29,11 @@ static int	ft_srchln(int j, char **str, char **line, int use)
 		{
 			j = (new[j] == '\n') ? j + 1 : j;
 			if (new[j])
-				new = ft_strdup(new + j);
+				ptr = ft_strdup(new + j);
 			else
-				ft_strdel(&new);
-			*str = new;
+				ptr = NULL;
+			ft_strdel(&new);
+			*str = ptr;
 		}
 	}
 	return (j);
@@ -74,12 +76,13 @@ int			get_next_line(const int fd, char **line)
 		i[1] = ft_srchln(i[1], &str, line, 0);
 		i[2] = (str[i[1]] == '\n') ? 0 : 1;
 	}
-	if (i[0] == -1)
-	{
-		return (-1);
-	}
 	if (*str == '\0')
+	{
+		ft_strdel(&str);
+		if (i[0] == -1)
+			return (-1);
 		return (0);
+	}
 	ft_srchln(i[1], &str, line, 1);
 	return (1);
 }
